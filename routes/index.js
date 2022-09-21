@@ -62,42 +62,6 @@ router.post('*', urlencodedParser, function (req, res) {
     "async": false
   };
 
-  // shippo.carrieraccount.list(function(err, accounts) {
-  //   if (err) {
-  //     res.send(err);
-  //   } else {
-  //     res.send(accounts);
-  //   }
-  // });
-
-  // Use with prod to get service levels
-  // shippo.shipment.create({
-  //   "address_from": addressFrom,
-  //   "address_to": addressTo,
-  //   "parcels": [parcel],
-  //   "async": false
-  // }, function(err, shipment){
-  //   // asynchronously called
-  //   if (err) {
-  //     res.send(err);
-  //   } else {
-  //     res.send(shipment);
-  //   }
-  // });
-
-  // Fedex
-  // carrier_account: f87150c740de4ef4b7d51b49e3021421 // don't use this one
-  // servicelevel_token: fedex_2_day
-  // carrier_account: ae6cf7b25f34447483bf75505446a460
-
-  // UPS
-  // carrier_account: 52b612c778574f2db816e46d709e41b0
-  // servicelevel_toke: ups_ground
-
-  // USPS   
-  // carrier_account: 00378fce78ec4993b419757bd9e29ba3
-  // servicelevel_toke: usps_priority
-
   let carrieraccount = false;
   if (req.body.carrier === "usps_priority") {
     carrieraccount = "00378fce78ec4993b419757bd9e29ba3";
