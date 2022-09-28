@@ -83,12 +83,6 @@ router.post('*', urlencodedParser, function (req, res) {
       "carrier_account": carrieraccount,
       "servicelevel_token": req.body.carrier
     }, function (err, transaction) {
-      // asynchronously called
-      if (err) {
-        res.send(err);
-      }
-      // Handle errors
-      // Test deploy
       if (transaction.status === "SUCCESS") {
         const messageParams = {
           from: "Mitch Hurst <mitch@hurstdentalstudio.com>",
@@ -113,13 +107,20 @@ router.post('*', urlencodedParser, function (req, res) {
             `
         };
         mg.messages.create(domain, messageParams)
-          .then(msg => console.log(msg)) // logs response data
-          .catch(err => console.error(err)); // logs any error
+          .then(msg => {
+            console.log(msg);
+          }) // logs response data
+          .catch(err => {
+            console.log(err);
+          }); // logs any error
+        console.log(transaction);
+        res.send({
+          status: "SUCCESS"
+        });
+      } else {
+        console.log(err);
+        res.send(err);
       }
-      // res.send(transaction);
-      res.send({
-        status: "SUCCESS"
-      });
     });
   }
 });
