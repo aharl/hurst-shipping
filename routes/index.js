@@ -12,6 +12,7 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 /* GET home page. */
 router.get('*', function (req, res, next) {
+  console.log("redirecting user to shipping page");
   res.redirect(301, "https://hurstdentalstudio.com/shipping");
 });
 
