@@ -5,12 +5,8 @@ const bodyParser = require('body-parser');
 const formData = require('form-data');
 const Mailgun = require('mailgun.js');
 
-// Mailgun Sandbox Keys
-const domain = process.env.MAILDOMAIN;
-const api_key = process.env.MAILKEY;
-
 const mailgun = new Mailgun(formData);
-const mg = mailgun.client({ username: 'api', key: api_key });
+const mg = mailgun.client({username: 'api', key: process.env.MAILKEY});
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -106,7 +102,7 @@ router.post('*', urlencodedParser, function (req, res) {
             </ol>
             `
         };
-        mg.messages.create(domain, messageParams)
+        mg.messages.create(process.env.MAILDOMAIN, messageParams)
           .then(msg => {
             console.log(msg);
           }) // logs response data
