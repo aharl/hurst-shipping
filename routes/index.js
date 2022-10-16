@@ -105,16 +105,10 @@ router.post('*', urlencodedParser, function (req, res) {
         };
         mg.messages.create(process.env.MAILDOMAIN, messageParams)
           .then(msg => {
-            console.log({
-              status: "mailgun success",
-              message: msg
-            });
+            console.log(msg);
           }) // logs response data
           .catch(err => {
-            console.log({
-              status: "error",
-              error: err
-            });
+            console.log(err);
           }); // logs any error
         console.log(transaction);
         res.send({
