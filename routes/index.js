@@ -106,14 +106,15 @@ router.post('*', urlencodedParser, function (req, res) {
         mg.messages.create(process.env.MAILDOMAIN, messageParams)
           .then(msg => {
             console.log(msg);
+            res.send({
+              status: "SUCCESS"
+            });
           }) // logs response data
           .catch(err => {
             console.log(err);
+            res.send(err);
           }); // logs any error
         console.log(transaction);
-        res.send({
-          status: "SUCCESS"
-        });
       } else {
         console.log(err);
         res.send(err);
