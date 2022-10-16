@@ -107,7 +107,8 @@ router.post('*', urlencodedParser, function (req, res) {
           .then(msg => {
             console.log(msg);
             res.send({
-              status: "SUCCESS"
+              status: "SUCCESS",
+              message: msg
             });
           }) // logs response data
           .catch(err => {
