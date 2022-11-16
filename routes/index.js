@@ -17,17 +17,29 @@ router.get('*', function (req, res, next) {
 });
 
 /* POST home page. */
-router.post('*', urlencodedParser, function (req, res) {
+router.post('*', urlencodedParser, (req, res) => {
+
+  // const addressFrom = {
+  //   "name": req.body.name,
+  //   "company": req.body.company,
+  //   "street1": req.body.street1,
+  //   "city": req.body.city,
+  //   "state": req.body.state,
+  //   "zip": req.body.zip,
+  //   "country": "US",
+  //   "phone": req.body.phone,
+  //   "email": req.body.email,
+  // };
 
   const addressFrom = {
     "name": req.body.name,
     "company": req.body.company,
-    "street1": req.body.street1,
-    "city": req.body.city,
-    "state": req.body.state,
-    "zip": req.body.zip,
+    "street1": "700 East State Street Ste.200",
+    "city": "Eagle",
+    "state": "ID",
+    "zip": "83616",
     "country": "US",
-    "phone": req.body.phone,
+    "phone": "(208) 378-3506",
     "email": req.body.email,
   };
 
@@ -59,10 +71,11 @@ router.post('*', urlencodedParser, function (req, res) {
     "async": false
   };
 
+  // (req.body.carrier === "usps_priority") {
+  //   carrieraccount = "00378fce78ec4993b419757bd9e29ba3";
+
   let carrieraccount = false;
-  if (req.body.carrier === "usps_priority") {
-    carrieraccount = "00378fce78ec4993b419757bd9e29ba3";
-  } else if (req.body.carrier === "fedex_2_day") {
+  if (req.body.carrier === "fedex_2_day") {
     carrieraccount = "ae6cf7b25f34447483bf75505446a460";
   } else if (req.body.carrier === "ups_ground") {
     carrieraccount = "52b612c778574f2db816e46d709e41b0";
@@ -74,13 +87,15 @@ router.post('*', urlencodedParser, function (req, res) {
   }
 
   if (carrieraccount) {
+
     shippo.transaction.create({
       "shipment": shipment,
       // Selecting carrier accounts
       "carrier_account": carrieraccount,
       "servicelevel_token": req.body.carrier
-    }, function (err, transaction) {
+    }, (err, transaction) => {
       if (transaction.status === "SUCCESS") {
+        
         const messageParams = {
           from: "Mitch Hurst <mitch@hurstdentalstudio.com>",
           to: [req.body.email],
@@ -103,19 +118,23 @@ router.post('*', urlencodedParser, function (req, res) {
             </ol>
             `
         };
+        
         mg.messages.create(process.env.MAILDOMAIN, messageParams)
           .then(msg => {
-            console.log(msg);
+            console.log({
+              mailgun: msg,
+              shippo: transaction
+            });
+            // console.log(transaction);
             res.send({
               status: "SUCCESS",
               message: msg
             });
-          }) // logs response data
+          })
           .catch(err => {
             console.log(err);
             res.send(err);
           }); // logs any error
-        console.log(transaction);
       } else {
         console.log(err);
         res.send(err);
